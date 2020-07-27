@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const cors = require('cors');
 
 const db_key = require('./config/keys').mongoURI;
 
@@ -23,6 +24,8 @@ const imageFilter = (req, file, callback) => {
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(multer({ storage: storage, fileFilter: imageFilter }).single('image'));
+
+app.use(cors());
 
 app.get('/', (req, res) => res.send('Server Work'));
 app.use('/api/restaurant', require('./routes/restaurant'));

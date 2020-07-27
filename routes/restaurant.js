@@ -19,6 +19,8 @@ router.post('/', async (req, res, next) => {
                 data: fileData
             });
             console.log(uploadedFile);
+
+            return res.status(200);
         })
     } catch(err){
         console.error(err);
