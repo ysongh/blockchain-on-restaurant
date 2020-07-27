@@ -25,6 +25,7 @@ app.use(bodyParser.json());
 app.use(multer({ storage: storage, fileFilter: imageFilter }).single('image'));
 
 app.get('/', (req, res) => res.send('Server Work'));
+app.use('/api/restaurant', require('./routes/restaurant'));
 
 const port = process.env.PORT || 1000;
 
