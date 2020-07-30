@@ -6,6 +6,21 @@ const { fleekAPIKey, fleekAPISecret } = require('../config/keys');
 
 const Restaurant = require('../models/Restaurant');
 
+// GET /api/restaurant
+// find all restaurants
+router.get('/', async (req, res) => {
+    try{
+        const restaurants = await Restaurant.find();
+
+        return res.status(200).json({
+            data: restaurants,
+            count: restaurants.length
+        });
+    } catch(err){
+        console.error(err);
+    }
+});
+
 // POST /api/restaurant
 // add restaurant deal
 router.post('/', async (req, res, next) => {
