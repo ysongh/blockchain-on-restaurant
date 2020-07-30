@@ -9,8 +9,14 @@ const Restaurant = require('../models/Restaurant');
 // POST /api/restaurant
 // add restaurant deal
 router.post('/', async (req, res, next) => {
-    console.log(req.file);
     try{
+        const newRestaurant = {
+            name: req.body.name,
+            price: req.body.price,
+            location: req.body.location,
+            description: req.body.description
+        };
+
         fs.readFile(req.file.path, async (error, fileData) => {
             const uploadedFile = await fleekStorage.upload({
                 apiKey: fleekAPIKey,
@@ -18,10 +24,13 @@ router.post('/', async (req, res, next) => {
                 key: req.file.filename,
                 data: fileData
             });
-            console.log(uploadedFile);
+            newRestaurant["image"] = uploadedFile.publicUrl;
 
-            return res.status(200);
+            const dataRestaurant = await Restaurant.create(newRestaurant);
+
+            return res.status(201).json({ data: dataRestaurant });
         })
+
     } catch(err){
         console.error(err);
     }
