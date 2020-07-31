@@ -29,7 +29,7 @@ app.use(cors());
 
 app.get('/', (req, res) => res.send('Server Work'));
 app.use('/api/restaurant', require('./routes/restaurant'));
-app.use('/api/restaurant', require('./routes/deal'));
+app.use('/api/deal', require('./routes/deal'));
 
 const port = process.env.PORT || 1000;
 

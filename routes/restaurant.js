@@ -51,7 +51,7 @@ router.post('/', async (req, res, next) => {
 });
 
 // GET /api/restaurant/:restaurantId
-// find more detail about a restaurants
+// find more detail about a restaurant
 router.get('/:restaurantId', async (req, res) => {
     try{
         const restaurantId = req.params.restaurantId;

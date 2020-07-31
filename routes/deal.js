@@ -4,7 +4,23 @@ const router = express.Router();
 const Deal = require('../models/Deal');
 const Restaurant = require('../models/Restaurant');
 
-// POST /api/restaurant/:restaurantId
+// GET /api/deal
+// find all deals
+router.get('/', async (req, res) => {
+    try{
+        const deals = await Deal.find();
+
+        return res.status(200).json({
+            data: deals,
+            count: deals.length
+        });
+    } catch(err){
+        console.error(err);
+    }
+});
+
+
+// POST /api/deal/:restaurantId
 // add a deal
 router.post('/:restaurantId', async (req, res) => {
     try{
@@ -31,7 +47,7 @@ router.post('/:restaurantId', async (req, res) => {
             data: dataDeal,
             restaurant: restaurant
         });
-        
+
     } catch(err){
         console.error(err);
     }
