@@ -27,7 +27,6 @@ router.post('/', async (req, res, next) => {
     try{
         const newRestaurant = {
             name: req.body.name,
-            price: req.body.price,
             location: req.body.location,
             description: req.body.description
         };
