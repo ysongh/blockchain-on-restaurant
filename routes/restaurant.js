@@ -50,5 +50,21 @@ router.post('/', async (req, res, next) => {
     }
 });
 
+// GET /api/restaurant/:restaurantId
+// find more detail about a restaurants
+router.get('/:restaurantId', async (req, res) => {
+    try{
+        const restaurantId = req.params.restaurantId;
+        const restaurant = await Restaurant.findById(restaurantId).populate("deals");
+
+        return res.status(200).json({
+            data: restaurant
+        });
+    } catch(err){
+        console.error(err);
+    }
+});
+
+
 module.exports = router;
 
