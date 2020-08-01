@@ -40,7 +40,7 @@ router.post('/:restaurantId', async (req, res) => {
 
         const dataDeal = await Deal.create(newDeal);
 
-        restaurant.deals.push(dataDeal._id);
+        restaurant.deals.unshift(dataDeal._id);
         await restaurant.save();
 
         return res.status(201).json({

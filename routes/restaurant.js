@@ -10,7 +10,7 @@ const Restaurant = require('../models/Restaurant');
 // find all restaurants
 router.get('/', async (req, res) => {
     try{
-        const restaurants = await Restaurant.find();
+        const restaurants = await Restaurant.find().sort('-date');
 
         return res.status(200).json({
             data: restaurants,
