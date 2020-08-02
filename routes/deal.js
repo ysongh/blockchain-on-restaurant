@@ -1,5 +1,8 @@
+const fs = require('fs');
 const express = require('express');
 const router = express.Router();
+const fleekStorage = require('@fleekhq/fleek-storage-js');
+const { fleekAPIKey, fleekAPISecret } = require('../config/keys');
 
 const Deal = require('../models/Deal');
 const Restaurant = require('../models/Restaurant');
@@ -38,15 +41,25 @@ router.post('/:restaurantId', async (req, res) => {
             restaurant: restaurantId
         };
 
-        const dataDeal = await Deal.create(newDeal);
+        fs.readFile(req.file.path, async (error, fileData) => {
+            const uploadedFile = await fleekStorage.upload({
+                apiKey: fleekAPIKey,
+                apiSecret: fleekAPISecret,
+                key: req.file.filename,
+                data: fileData
+            });
+            newDeal["image"] = uploadedFile.publicUrl;
 
-        restaurant.deals.unshift(dataDeal._id);
-        await restaurant.save();
+            const dataDeal = await Deal.create(newDeal);
+            restaurant.deals.unshift(dataDeal._id);
 
-        return res.status(201).json({
-            data: dataDeal,
-            restaurant: restaurant
-        });
+            await restaurant.save();
+
+            return res.status(201).json({
+                data: dataDeal,
+                restaurant: restaurant
+            });
+        })
 
     } catch(err){
         console.error(err);
