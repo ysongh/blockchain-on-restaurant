@@ -65,6 +65,28 @@ router.get('/:restaurantId', async (req, res) => {
     }
 });
 
+// DELETE /api/restaurant/:restaurantId
+// delete a restaurant
+router.delete('/:restaurantId', async (req, res) => {
+    try{
+        const restaurantId = req.params.restaurantId;
+
+        const restaurant = await Restaurant.findById(restaurantId);
+
+        if(!restaurant){
+            res.status(404).json({ error: "This restaurant cannot be found"});
+        }
+
+        await Restaurant.findByIdAndRemove(restaurantId);
+
+        return res.status(200).json({
+            data: restaurant
+        })
+    }catch(err){
+        console.error(err);
+    }
+});
+
 
 module.exports = router;
 
