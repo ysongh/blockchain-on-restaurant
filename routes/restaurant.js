@@ -65,6 +65,31 @@ router.get('/:restaurantId', async (req, res) => {
     }
 });
 
+// PUT /api/restaurant/:restaurantId
+// edit a restaurant
+router.put('/:restaurantId', async (req, res) => {
+    try{
+        const restaurantId = req.params.restaurantId;
+        const restaurant = await Restaurant.findById(restaurantId);
+
+        if(!restaurant){
+            res.status(404).json({ error: "This restaurant cannot be found"});
+        }
+
+        restaurant.name = req.body.name,
+        restaurant.location = req.body.location,
+        restaurant.description = req.body.description
+
+        await restaurant.save();
+
+        return res.status(200).json({
+            data: restaurant
+        });
+    } catch(err){
+        console.error(err);
+    }
+});
+
 // DELETE /api/restaurant/:restaurantId
 // delete a restaurant
 router.delete('/:restaurantId', async (req, res) => {
