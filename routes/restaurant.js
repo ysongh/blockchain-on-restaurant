@@ -31,19 +31,24 @@ router.post('/', async (req, res, next) => {
             description: req.body.description
         };
 
-        fs.readFile(req.file.path, async (error, fileData) => {
-            const uploadedFile = await fleekStorage.upload({
-                apiKey: fleekAPIKey,
-                apiSecret: fleekAPISecret,
-                key: req.file.filename,
-                data: fileData
+        if(req.file){
+            fs.readFile(req.file.path, async (error, fileData) => {
+                const uploadedFile = await fleekStorage.upload({
+                    apiKey: fleekAPIKey,
+                    apiSecret: fleekAPISecret,
+                    key: req.file.filename,
+                    data: fileData
+                });
+                newRestaurant["image"] = uploadedFile.publicUrl;
+    
+                const dataRestaurant = await Restaurant.create(newRestaurant);
+    
+                return res.status(201).json({ data: dataRestaurant });
             });
-            newRestaurant["image"] = uploadedFile.publicUrl;
-
-            const dataRestaurant = await Restaurant.create(newRestaurant);
-
-            return res.status(201).json({ data: dataRestaurant });
-        })
+        }
+        const dataRestaurant = await Restaurant.create(newRestaurant);
+    
+        return res.status(201).json({ data: dataRestaurant });
 
     } catch(err){
         console.error(err);

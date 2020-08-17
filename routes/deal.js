@@ -41,26 +41,36 @@ router.post('/:restaurantId', async (req, res) => {
             restaurant: restaurantId
         };
 
-        fs.readFile(req.file.path, async (error, fileData) => {
-            const uploadedFile = await fleekStorage.upload({
-                apiKey: fleekAPIKey,
-                apiSecret: fleekAPISecret,
-                key: req.file.filename,
-                data: fileData
+        if(req.file){
+            fs.readFile(req.file.path, async (error, fileData) => {
+                const uploadedFile = await fleekStorage.upload({
+                    apiKey: fleekAPIKey,
+                    apiSecret: fleekAPISecret,
+                    key: req.file.filename,
+                    data: fileData
+                });
+                newDeal["image"] = uploadedFile.publicUrl;
+    
+                const dataDeal = await Deal.create(newDeal);
+                restaurant.deals.unshift(dataDeal._id);
+    
+                await restaurant.save();
+    
+                return res.status(201).json({
+                    data: dataDeal,
+                    restaurant: restaurant
+                });
             });
-            newDeal["image"] = uploadedFile.publicUrl;
+        }
+        const dataDeal = await Deal.create(newDeal);
+        restaurant.deals.unshift(dataDeal._id);
 
-            const dataDeal = await Deal.create(newDeal);
-            restaurant.deals.unshift(dataDeal._id);
+        await restaurant.save();
 
-            await restaurant.save();
-
-            return res.status(201).json({
-                data: dataDeal,
-                restaurant: restaurant
-            });
-        })
-
+        return res.status(201).json({
+            data: dataDeal,
+            restaurant: restaurant
+        });
     } catch(err){
         console.error(err);
     }
