@@ -76,6 +76,37 @@ router.post('/:restaurantId', async (req, res) => {
     }
 });
 
+// PUT /api/deal/:restaurantId/:dealId
+// edit a deal
+router.put('/:restaurantId/:dealId', async (req, res) => {
+    try{
+        const dealId = req.params.dealId;
+        const restaurantId = req.params.restaurantId;
+
+        const deal = await Deal.findById(dealId);
+        const restaurant = await Restaurant.findById(restaurantId);
+
+        if(!deal){
+            res.status(404).json({ error: "This deal cannot be found"});
+        }
+
+        if(!restaurant){
+            res.status(404).json({ error: "This restaurant cannot be found"});
+        }
+        deal.name = req.body.name,
+        deal.price = req.body.price,
+        deal.description = req.body.description
+
+        await deal.save();
+
+        return res.status(200).json({
+            data: deal
+        });
+    } catch(err){
+        console.error(err);
+    }
+});
+
 // DELETE /api/deal/:restaurantId/:dealId
 // delete a deal
 router.delete('/:restaurantId/:dealId', async (req, res) => {
@@ -107,6 +138,4 @@ router.delete('/:restaurantId/:dealId', async (req, res) => {
     }
 });
 
-
 module.exports = router;
-
