@@ -22,7 +22,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-
 // POST /api/deal/:restaurantId
 // add a deal
 router.post('/:restaurantId', async (req, res) => {
@@ -70,6 +69,26 @@ router.post('/:restaurantId', async (req, res) => {
         return res.status(201).json({
             data: dataDeal,
             restaurant: restaurant
+        });
+    } catch(err){
+        console.error(err);
+    }
+});
+
+// GET /api/deal/:restaurantId/:dealId
+// find deal by id
+router.get('/:restaurantId/:dealId', async (req, res) => {
+    try{
+        const dealId = req.params.dealId;
+
+        const deal = await Deal.findById(dealId);
+
+        if(!deal){
+            res.status(404).json({ error: "This deal cannot be found"});
+        }
+
+        return res.status(200).json({
+            data: deal
         });
     } catch(err){
         console.error(err);
