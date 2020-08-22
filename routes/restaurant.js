@@ -46,9 +46,10 @@ router.post('/', async (req, res, next) => {
                 return res.status(201).json({ data: dataRestaurant });
             });
         }
-        const dataRestaurant = await Restaurant.create(newRestaurant);
-    
-        return res.status(201).json({ data: dataRestaurant });
+        else{
+            const dataRestaurant = await Restaurant.create(newRestaurant);
+            return res.status(201).json({ data: dataRestaurant });
+        }
 
     } catch(err){
         console.error(err);

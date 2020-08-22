@@ -61,15 +61,18 @@ router.post('/:restaurantId', async (req, res) => {
                 });
             });
         }
-        const dataDeal = await Deal.create(newDeal);
-        restaurant.deals.unshift(dataDeal._id);
+        else{
+            const dataDeal = await Deal.create(newDeal);
+            restaurant.deals.unshift(dataDeal._id);
 
-        await restaurant.save();
+            await restaurant.save();
 
-        return res.status(201).json({
-            data: dataDeal,
-            restaurant: restaurant
-        });
+            return res.status(201).json({
+                data: dataDeal,
+                restaurant: restaurant
+            });
+        }
+        
     } catch(err){
         console.error(err);
     }
