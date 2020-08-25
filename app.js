@@ -28,6 +28,7 @@ app.use(multer({ storage: storage, fileFilter: imageFilter }).single('image'));
 app.use(cors());
 
 app.get('/', (req, res) => res.send('Server Work'));
+app.use('/api/owner', require('./routes/owner'));
 app.use('/api/restaurant', require('./routes/restaurant'));
 app.use('/api/deal', require('./routes/deal'));
 
