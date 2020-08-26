@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const keys = require('../config/keys');
 
 const Owner = require('../models/Owner');
 
@@ -19,9 +22,12 @@ router.post('/register', async (req, res) => {
             password: req.body.password
         });
 
-        const dataOwner = await Owner.create(newOwner);
+        const salt = await bcrypt.genSalt(10);
+        newOwner.password = await bcrypt.hash(req.body.password, salt);
 
-        return res.status(201).json({ data: dataOwner });
+        await newOwner.save();
+
+        return res.status(201).json({ data: newOwner });
     } catch(err){
         console.error(err);
     }
@@ -37,20 +43,24 @@ router.put('/login', async (req, res) => {
             return res.status(400).json({ errors: 'Email not found' });
         }
 
-        if(req.body.password != owner.password){
+        const isMatch = await bcrypt.compare(req.body.password, owner.password);
+
+        if(!isMatch){
             return res.status(400).json({ errors: 'Invalid email or password' });
         }
 
-        const loginData = {
-            name: owner.name,
-            email: owner.email,
-        };
+        const payload = { id: owner.id };
 
-        return res.status(200).json({ data: loginData });
+        jwt.sign(payload, keys.secretOrKey, { expiresIn: '1 days' },
+            (err, token) => {
+                if (err) throw err;
+                res.status(200).json({ token });
+            }
+        );
+
     } catch(err){
         console.error(err);
     }
 });
-module.exports = router;
 
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const passport = require('passport');
 const cors = require('cors');
 
 const db_key = require('./config/keys').mongoURI;
@@ -24,6 +25,9 @@ const imageFilter = (req, file, callback) => {
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(multer({ storage: storage, fileFilter: imageFilter }).single('image'));
+
+app.use(passport.initialize());
+require('./config/passport')(passport);
 
 app.use(cors());
 
