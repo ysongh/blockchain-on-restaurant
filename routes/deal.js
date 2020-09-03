@@ -137,7 +137,7 @@ router.delete('/:restaurantId/:dealId', async (req, res) => {
         const restaurantId = req.params.restaurantId;
 
         const deal = await Deal.findById(dealId);
-        const restaurant = await Restaurant.findById(restaurantId);
+        const restaurant = await Restaurant.findById(restaurantId).populate("deals");
 
         if(!deal){
             res.status(404).json({ error: "This deal cannot be found"});
@@ -153,7 +153,7 @@ router.delete('/:restaurantId/:dealId', async (req, res) => {
         await restaurant.save();
 
         return res.status(200).json({
-            data: deal
+            data: restaurant
         })
     }catch(err){
         console.error(err);
