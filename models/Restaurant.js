@@ -21,12 +21,16 @@ const RestaurantSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    deals:[
+    deals: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Deal'
         }
-    ]
+    ],
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'Owner'
+    }
 });
 
 module.exports = mongoose.model('Restaurant', RestaurantSchema);
