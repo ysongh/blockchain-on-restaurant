@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const fleekStorage = require('@fleekhq/fleek-storage-js');
 const { fleekAPIKey, fleekAPISecret } = require('../config/keys');
 
@@ -23,7 +24,7 @@ router.get('/', async (req, res) => {
 
 // POST /api/restaurant
 // add restaurant deal
-router.post('/', async (req, res, next) => {
+router.post('/', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     try{
         const newRestaurant = {
             name: req.body.name,
@@ -73,7 +74,7 @@ router.get('/:restaurantId', async (req, res) => {
 
 // PUT /api/restaurant/:restaurantId
 // edit a restaurant
-router.put('/:restaurantId', async (req, res) => {
+router.put('/:restaurantId', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try{
         const restaurantId = req.params.restaurantId;
         const restaurant = await Restaurant.findById(restaurantId);
@@ -98,7 +99,7 @@ router.put('/:restaurantId', async (req, res) => {
 
 // DELETE /api/restaurant/:restaurantId
 // delete a restaurant
-router.delete('/:restaurantId', async (req, res) => {
+router.delete('/:restaurantId', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try{
         const restaurantId = req.params.restaurantId;
 

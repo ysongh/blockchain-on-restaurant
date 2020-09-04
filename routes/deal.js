@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const fleekStorage = require('@fleekhq/fleek-storage-js');
 const { fleekAPIKey, fleekAPISecret } = require('../config/keys');
 
@@ -24,7 +25,7 @@ router.get('/', async (req, res) => {
 
 // POST /api/deal/:restaurantId
 // add a deal
-router.post('/:restaurantId', async (req, res) => {
+router.post('/:restaurantId', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try{
         const restaurantId = req.params.restaurantId;
         const restaurant = await Restaurant.findById(restaurantId);
@@ -100,7 +101,7 @@ router.get('/:restaurantId/:dealId', async (req, res) => {
 
 // PUT /api/deal/:restaurantId/:dealId
 // edit a deal
-router.put('/:restaurantId/:dealId', async (req, res) => {
+router.put('/:restaurantId/:dealId', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try{
         const dealId = req.params.dealId;
         const restaurantId = req.params.restaurantId;
@@ -131,7 +132,7 @@ router.put('/:restaurantId/:dealId', async (req, res) => {
 
 // DELETE /api/deal/:restaurantId/:dealId
 // delete a deal
-router.delete('/:restaurantId/:dealId', async (req, res) => {
+router.delete('/:restaurantId/:dealId', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try{
         const dealId = req.params.dealId;
         const restaurantId = req.params.restaurantId;
