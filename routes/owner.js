@@ -54,7 +54,7 @@ router.put('/login', async (req, res) => {
         jwt.sign(payload, keys.secretOrKey, { expiresIn: '1 days' },
             (err, token) => {
                 if (err) throw err;
-                res.status(200).json({ token });
+                res.status(200).json({ token: 'Bearer ' + token });
             }
         );
 
