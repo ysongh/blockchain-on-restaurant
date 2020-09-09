@@ -29,7 +29,8 @@ router.post('/', passport.authenticate('jwt', {session: false}), async (req, res
         const newRestaurant = {
             name: req.body.name,
             location: req.body.location,
-            description: req.body.description
+            description: req.body.description,
+            ownerId: req.user.id
         };
 
         if(req.file){

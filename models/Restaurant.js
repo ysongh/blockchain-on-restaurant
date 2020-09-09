@@ -27,7 +27,7 @@ const RestaurantSchema = new Schema({
             ref: 'Deal'
         }
     ],
-    owner: {
+    ownerId: {
         type: Schema.Types.ObjectId,
         ref: 'Owner'
     }
