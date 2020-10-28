@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
