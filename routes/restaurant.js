@@ -30,6 +30,8 @@ router.post('/', passport.authenticate('jwt', {session: false}), async (req, res
             name: req.body.name,
             location: req.body.location,
             description: req.body.description,
+            phoneNumber: req.body.phoneNumber,
+            email: req.body.email,
             ownerId: req.user.id
         };
 
@@ -84,9 +86,11 @@ router.put('/:restaurantId', passport.authenticate('jwt', {session: false}), asy
             res.status(404).json({ error: "This restaurant cannot be found"});
         }
 
-        restaurant.name = req.body.name,
-        restaurant.location = req.body.location,
-        restaurant.description = req.body.description
+        restaurant.name = req.body.name;
+        restaurant.location = req.body.location;
+        restaurant.description = req.body.description;
+        restaurant.phoneNumber = req.body.phoneNumber;
+        restaurant.email = req.body.email
 
         await restaurant.save();
 

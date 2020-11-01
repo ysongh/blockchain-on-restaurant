@@ -11,6 +11,12 @@ const RestaurantSchema = new Schema({
         type: String,
         required: [true, "Please enter the location of the restaurant"]
     },
+    phoneNumber: {
+        type: String
+    },
+    email: {
+        type: String
+    },
     description: {
         type: String
     },
