@@ -27,7 +27,15 @@ router.post('/register', async (req, res) => {
 
         await newOwner.save();
 
-        return res.status(201).json({ data: newOwner });
+        const payload = { id: newOwner.id };
+
+        jwt.sign(payload, keys.secretOrKey, { expiresIn: '1 days' },
+            (err, token) => {
+                if (err) throw err;
+                return res.status(201).json({ token: 'Bearer ' + token });
+            }
+        );
+
     } catch(err){
         console.error(err);
     }
