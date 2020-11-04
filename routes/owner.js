@@ -71,4 +71,21 @@ router.put('/login', async (req, res) => {
     }
 });
 
+// GET /api/owner/profile/:ownerId
+// get the owner's profile
+router.get('/profile/:ownerId', async (req, res) => {
+    try{
+        const ownerId = req.params.ownerId;
+        const owner = await Owner.findById(ownerId).populate("restaurants");
+
+        owner.password = "";
+
+        return res.status(200).json({
+            data: owner
+        });
+    } catch(err){
+        console.error(err);
+    }
+});
+
 module.exports = router;
