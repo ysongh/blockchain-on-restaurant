@@ -5,6 +5,7 @@ const passport = require('passport');
 const fleekStorage = require('@fleekhq/fleek-storage-js');
 const { fleekAPIKey, fleekAPISecret } = require('../config/keys');
 
+const Owner = require('../models/Owner');
 const Restaurant = require('../models/Restaurant');
 
 // GET /api/restaurant
@@ -26,6 +27,8 @@ router.get('/', async (req, res) => {
 // add restaurant deal
 router.post('/', passport.authenticate('jwt', {session: false}), async (req, res, next) => {
     try{
+        const owner = await Owner.findById(req.user.id);
+
         const newRestaurant = {
             name: req.body.name,
             location: req.body.location,
@@ -46,12 +49,19 @@ router.post('/', passport.authenticate('jwt', {session: false}), async (req, res
                 newRestaurant["image"] = uploadedFile.publicUrl;
     
                 const dataRestaurant = await Restaurant.create(newRestaurant);
+
+                owner.restaurants.unshift(dataRestaurant._id);
+                await owner.save();
     
                 return res.status(201).json({ data: dataRestaurant });
             });
         }
         else{
             const dataRestaurant = await Restaurant.create(newRestaurant);
+            
+            owner.restaurants.unshift(dataRestaurant._id);
+            await owner.save();
+
             return res.status(201).json({ data: dataRestaurant });
         }
 
