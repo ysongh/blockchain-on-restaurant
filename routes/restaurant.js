@@ -114,17 +114,22 @@ router.put('/:restaurantId', passport.authenticate('jwt', {session: false}), asy
 
 // DELETE /api/restaurant/:restaurantId
 // delete a restaurant
-router.delete('/:restaurantId', passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.delete('/:restaurantId', async (req, res) => {
     try{
         const restaurantId = req.params.restaurantId;
 
         const restaurant = await Restaurant.findById(restaurantId);
+        const owner = await Owner.findById(restaurant.ownerId);
+        
 
         if(!restaurant){
             res.status(404).json({ error: "This restaurant cannot be found"});
         }
 
         await Restaurant.findByIdAndRemove(restaurantId);
+        
+        owner.restaurants = owner.restaurants.filter(restaurant => restaurant._id !== restaurantId);
+        await owner.save();
 
         return res.status(200).json({
             data: restaurant
