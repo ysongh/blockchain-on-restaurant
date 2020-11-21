@@ -23,6 +23,23 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET /api/deal/:restaurantId
+// find all deals by restaurantId
+router.get('/:restaurantId', async (req, res) => {
+    try{
+        const restaurantId = req.params.restaurantId;
+
+        const deals = await Deal.find({ 'restaurant': restaurantId });
+
+        return res.status(200).json({
+            data: deals
+        });
+    } catch(err){
+        console.error(err);
+    }
+});
+
+
 // POST /api/deal/:restaurantId
 // add a deal
 router.post('/:restaurantId', passport.authenticate('jwt', {session: false}), async (req, res) => {
