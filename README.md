@@ -2,7 +2,7 @@
 A web app that reward customers with tokens when they make a purchase from a restaurant.
 
 - Live Site - https://eatoutcoin.on.fleek.co/
-- Front End Code - https://github.com/ysongh/blockchain-on-restaurant-client
+- Front End Code - https://github.com/ysongh/blockchain-on-restaurant-client/tree/V3
 - Demo - https://www.youtube.com/watch?v=SDb64n-NJmw&feature=youtu.be
 
 ## Features
